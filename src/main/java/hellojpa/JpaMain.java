@@ -1,5 +1,8 @@
 package hellojpa;
 
+import hellojpa.entity.Member;
+import hellojpa.entity.Team;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -13,29 +16,28 @@ public class JpaMain {
 
         tx.begin();
         try {
-            Member member1 = new Member();
-//            member1.setId("ID_A");
-            member1.setUsername("Tester1");
 
-            Member member2 = new Member();
-//            member1.setId("ID_A");
-            member2.setUsername("Tester2");
+            Team team = new Team();
+            team.setName("TeamB");
+            em.persist(team);
 
-            Member member3 = new Member();
-//            member1.setId("ID_A");
-            member3.setUsername("Tester3");
-//            member1.setRoleType(RoleType.GUEST);
-            System.out.println("===============");
-            em.persist(member1);
-            em.persist(member2);
-            em.persist(member3);
-            System.out.println("member1.getId() = " + member1.getId());
-            System.out.println("===============");
+            Member member = new Member();
+            member.setUsername("TesterB");
+            member.setTeam(team);
+            em.persist(member);
 //
-//            Member member2 = em.find(Member.class, 1L);
-//            if(member2 != null){
-//                member2.setUsername("ChangeName2");
-//            }
+////          테이블에 맞춘 모델링의 문제점
+//            Member findMember = em.find(Member.class, member.getId());
+//            Long findTeamId = findMember.getTeamId();
+//            Team findTeam = em.find(Team.class, findTeamId);
+
+            System.out.println("=================");
+            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = findMember.getTeam();
+            System.out.println("findTeam.getName() = " + findTeam.getName());
+            System.out.println("=================");
+
+
 
             tx.commit();
 

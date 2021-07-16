@@ -9,17 +9,25 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Entity(name = "Member") // 클래스 이름이 Default이다.
+@Entity // 클래스 이름이 Default이다.
 @Getter
 @Setter
 public class Member {
-    @Id @GeneratedValue // stratgy = Auto
+    @Id
+    @GeneratedValue // stratgy = Auto
     @Column(name = "MEMBER_ID")
     private Long id;
-    private String name;
-    private String city;
-    private String street;
-    private String zipcode;
+
+    @Column(name = "USERNAME")
+    private String username;
+
+//    @Column(name = "TEAM_ID")
+//    private Long teamId;
+
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
+
 
 
 //    @Column
@@ -44,11 +52,6 @@ public class Member {
     public Member() {
     }
 
-//    public Member(Long id, String name) {
-//
-//        this.id = id;
-//        this.name = name;
-//    }
 
 
 }
