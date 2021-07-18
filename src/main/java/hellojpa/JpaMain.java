@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -17,24 +18,38 @@ public class JpaMain {
         tx.begin();
         try {
 
-            Team team = new Team();
-            team.setName("TeamB");
-            em.persist(team);
+            Team team1 = new Team();
+            Team team2 = new Team();
+            team1.setName("TeamA");
+            team2.setName("TeamB");
+            em.persist(team1);
+            em.persist(team2);
 
-            Member member = new Member();
-            member.setUsername("TesterB");
-            member.setTeam(team);
-            em.persist(member);
-//
-////          테이블에 맞춘 모델링의 문제점
-//            Member findMember = em.find(Member.class, member.getId());
-//            Long findTeamId = findMember.getTeamId();
-//            Team findTeam = em.find(Team.class, findTeamId);
+            Member member1 = new Member();
+            Member member2 = new Member();
+            Member member3 = new Member();
+            member1.setUsername("TesterA");
+            member2.setUsername("TesterB");
+            member3.setUsername("TesterC");
+            member1.setTeam(team1);
+            member2.setTeam(team2);
+            member3.setTeam(team1);
+
+            em.persist(member1);
+            em.persist(member2);
+            em.persist(member3);
+
+            em.flush(); // 디비에 해당 내용을 바로 반영한다.
+            em.clear();
 
             System.out.println("=================");
-            Member findMember = em.find(Member.class, member.getId());
-            Team findTeam = findMember.getTeam();
-            System.out.println("findTeam.getName() = " + findTeam.getName());
+            Member findMember = em.find(Member.class, member3.getId());
+
+            List<Member> members = findMember.getTeam().getMembers();
+            for (Member member : members) {
+                System.out.println("findTeam.getName() = " + member.getUsername());
+            }
+
             System.out.println("=================");
 
 
