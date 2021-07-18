@@ -31,16 +31,18 @@ public class JpaMain {
             member1.setUsername("TesterA");
             member2.setUsername("TesterB");
             member3.setUsername("TesterC");
-            member1.setTeam(team1);
-            member2.setTeam(team2);
-            member3.setTeam(team1);
+            member1.changeTeam(team1);
+            member2.changeTeam(team2);
+            member3.changeTeam(team1);
 
             em.persist(member1);
             em.persist(member2);
             em.persist(member3);
+//
+//            em.flush(); // 디비에 해당 내용을 바로 반영한다.
+//            em.clear();
 
-            em.flush(); // 디비에 해당 내용을 바로 반영한다.
-            em.clear();
+//            team1.getMembers().add(member2); // 이 부분을 Member 엔티티 세터 클래스에 넣는 전략
 
             System.out.println("=================");
             Member findMember = em.find(Member.class, member3.getId());
