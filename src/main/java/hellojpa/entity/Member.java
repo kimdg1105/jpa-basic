@@ -24,16 +24,16 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-//    @Column(name = "TEAM_ID")
-//    private Long teamId;
+    @Column(name = "TEAM_ID")
+    private Long teamId;
 
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID") // FK 조인할 필드명
-    private Team team;
-
-    @OneToMany(mappedBy = "member")
-    private List<Order> orders = new ArrayList<>();
-
+//    @ManyToOne
+//    @JoinColumn(name = "TEAM_ID") // FK 조인할 필드명
+//    private Team team;
+//
+//    @OneToMany(mappedBy = "member")
+//    private List<Order> orders = new ArrayList<>();
+//
 
 
     @Column
@@ -57,10 +57,10 @@ public class Member {
     public Member() {
     }
 
-    public void changeTeam(Team team){
-        this.team = team;
-        team.getMembers().add(this);
-    }
+//    public void changeTeam(Team team){
+//        this.team = team;
+//        team.getMembers().add(this);
+//    }
 
 
 }
