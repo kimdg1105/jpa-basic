@@ -31,9 +31,6 @@ public class JpaMain {
             member1.setUsername("TesterA");
             member2.setUsername("TesterB");
             member3.setUsername("TesterC");
-            member1.changeTeam(team1);
-            member2.changeTeam(team2);
-            member3.changeTeam(team1);
 
             em.persist(member1);
             em.persist(member2);
@@ -45,12 +42,12 @@ public class JpaMain {
 //            team1.getMembers().add(member2); // 이 부분을 Member 엔티티 세터 클래스에 넣는 전략
 
             System.out.println("=================");
-            Member findMember = em.find(Member.class, member3.getId());
-
-            List<Member> members = findMember.getTeam().getMembers();
-            for (Member member : members) {
-                System.out.println("findTeam.getName() = " + member.getUsername());
-            }
+//            Member findMember = em.find(Member.class, member3.getId());
+//
+//            List<Member> members = findMember.getTeam().getMembers();
+//            for (Member member : members) {
+//                System.out.println("findTeam.getName() = " + member.getUsername());
+//            }
 
             System.out.println("=================");
 
