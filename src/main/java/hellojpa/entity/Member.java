@@ -1,6 +1,7 @@
 package hellojpa.entity;
 
 
+import hellojpa.entity.base.BaseEntity;
 import hellojpa.enums.RoleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity // 클래스 이름이 Default이다.
 @Getter
 @Setter
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue // stratgy = Auto
     @Column(name = "MEMBER_ID")

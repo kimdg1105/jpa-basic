@@ -1,6 +1,7 @@
 package hellojpa.entity;
 
 
+import hellojpa.entity.base.BaseEntity;
 import hellojpa.enums.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.util.List;
 @Table(name = "ORDERS")
 @Getter
 @Setter
-public class Order {
+public class Order extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "ORDER_ID")
     private Long id;

@@ -2,11 +2,15 @@ package hellojpa;
 
 import hellojpa.entity.Member;
 import hellojpa.entity.Team;
+import hellojpa.entity.inheritance.Album;
+import hellojpa.entity.inheritance.Book;
+import hellojpa.entity.inheritance.Movie;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -18,36 +22,19 @@ public class JpaMain {
         tx.begin();
         try {
 
-            Team team1 = new Team();
-            Team team2 = new Team();
-            team1.setName("TeamA");
-            team2.setName("TeamB");
-            em.persist(team1);
-            em.persist(team2);
-
-            Member member1 = new Member();
-            Member member2 = new Member();
-            Member member3 = new Member();
-            member1.setUsername("TesterA");
-            member2.setUsername("TesterB");
-            member3.setUsername("TesterC");
-
-            em.persist(member1);
-            em.persist(member2);
-            em.persist(member3);
-//
-//            em.flush(); // 디비에 해당 내용을 바로 반영한다.
-//            em.clear();
-
-//            team1.getMembers().add(member2); // 이 부분을 Member 엔티티 세터 클래스에 넣는 전략
-
             System.out.println("=================");
-//            Member findMember = em.find(Member.class, member3.getId());
-//
-//            List<Member> members = findMember.getTeam().getMembers();
-//            for (Member member : members) {
-//                System.out.println("findTeam.getName() = " + member.getUsername());
-//            }
+
+            Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("Kim");
+
+            Album album = new Album();
+            album.setArtist("Choi");
+            album.setName("Rap");
+
+            em.persist(book);
+            em.persist(album);
+
 
             System.out.println("=================");
 
