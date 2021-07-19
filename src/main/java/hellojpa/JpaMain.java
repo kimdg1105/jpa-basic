@@ -5,6 +5,7 @@ import hellojpa.entity.Team;
 import hellojpa.entity.inheritance.Album;
 import hellojpa.entity.inheritance.Book;
 import hellojpa.entity.inheritance.Movie;
+import org.hibernate.Hibernate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,16 +25,29 @@ public class JpaMain {
 
             System.out.println("=================");
 
-            Book book = new Book();
-            book.setName("JPA");
-            book.setAuthor("Kim");
 
-            Album album = new Album();
-            album.setArtist("Choi");
-            album.setName("Rap");
+            Member member = new Member();
+            member.setUsername("Dong");
 
-            em.persist(book);
-            em.persist(album);
+            em.persist(member);
+            em.flush();
+            em.clear();
+
+//            Member member1 = em.find(Member.class, member.getId());
+//            System.out.println("member1 = " + member1);
+
+            Member reference = em.getReference(Member.class, member.getId());
+            System.out.println("reference = " + reference.getClass());
+
+
+            Hibernate.initialize(reference);
+            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(reference));
+
+
+            em.detach(reference);
+            System.out.println("reference = " + reference.getUsername());
+
+
 
 
             System.out.println("=================");
@@ -43,6 +57,7 @@ public class JpaMain {
             tx.commit();
 
         }catch (Exception e){
+            e.printStackTrace();
             tx.rollback();
         }
         finally {
