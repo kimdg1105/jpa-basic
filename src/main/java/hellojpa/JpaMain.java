@@ -1,6 +1,8 @@
 package hellojpa;
 
+import hellojpa.entity.Child;
 import hellojpa.entity.Member;
+import hellojpa.entity.Parent;
 import hellojpa.entity.Team;
 import hellojpa.entity.inheritance.Album;
 import hellojpa.entity.inheritance.Book;
@@ -25,29 +27,20 @@ public class JpaMain {
 
             System.out.println("=================");
 
+            Parent parent = new Parent();
 
-            Member member = new Member();
-            member.setUsername("Dong");
+            Child child1 = new Child();
+            Child child2= new Child();
 
-            em.persist(member);
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
             em.flush();
             em.clear();
 
-//            Member member1 = em.find(Member.class, member.getId());
-//            System.out.println("member1 = " + member1);
-
-            Member reference = em.getReference(Member.class, member.getId());
-            System.out.println("reference = " + reference.getClass());
-
-
-            Hibernate.initialize(reference);
-            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(reference));
-
-
-            em.detach(reference);
-            System.out.println("reference = " + reference.getUsername());
-
-
+            Parent parent1 = em.find(Parent.class, parent.getId());
+            em.remove(parent1);
 
 
             System.out.println("=================");

@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity // 클래스 이름이 Default이다.
 @Getter
 @Setter
@@ -52,7 +54,7 @@ public class Member extends BaseEntity {
     @Lob
     private String description;
 
-    @OneToOne
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "LOCKER_ID")
     private Locker locker;
 
@@ -60,6 +62,10 @@ public class Member extends BaseEntity {
     @ManyToMany
     @JoinTable(name = "MEMBER_PRODUCT")
     private List<Product> products = new ArrayList<>();
+
+    @ManyToOne(fetch = LAZY) // 프록시 객체의 조회로 바뀐다.
+    @JoinColumn
+    private Team team;
 
 
     public Member() {
