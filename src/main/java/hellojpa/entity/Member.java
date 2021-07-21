@@ -3,6 +3,7 @@ package hellojpa.entity;
 
 import hellojpa.entity.base.BaseEntity;
 import hellojpa.entity.embedded.Address;
+import hellojpa.entity.embedded.AddressEntity;
 import hellojpa.entity.embedded.Period;
 import hellojpa.enums.RoleType;
 import lombok.Getter;
@@ -27,7 +28,6 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-
     @Embedded
     private Address homeAddress;
 
@@ -38,10 +38,14 @@ public class Member {
     @Column(name = "FOOD_NAME")
     private Set<String> favoriteFoods = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(name = "ADDRESS",
-            joinColumns = @JoinColumn(name = "MEMBER_ID"))
-    private List<Address> addressHistory = new ArrayList<>();
+//    @ElementCollection
+////    @CollectionTable(name = "ADDRESS",
+////            joinColumns = @JoinColumn(name = "MEMBER_ID"))
+////    private List<Address> addressHistory = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "MEMBER_ID")
+    private List<AddressEntity> addressHistory = new ArrayList<>();
 
     @Embedded
     private Period workPeriod;
