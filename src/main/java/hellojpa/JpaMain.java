@@ -36,31 +36,10 @@ public class JpaMain {
             member.setHomeAddress(address1);
             member.setWorkPeriod(new Period(LocalDateTime.now(),LocalDateTime.now()));
 
-            Member member2 = new Member();
-            Address address2 = new Address(address1.getCity(),address1.getStreet(),address1.getZipcode());
-
-            member2.setUsername("Dong2");
-            member2.setHomeAddress(address2);
-            member2.setWorkPeriod(new Period(LocalDateTime.now(),LocalDateTime.now()));
+            Address address = new Address(address1.getCity(),address1.getStreet(), "5678");
+            member.setHomeAddress(address);
 
             em.persist(member);
-            em.persist(member2);
-
-            em.flush();
-
-
-            address2.setCity("MAPO");
-            member2.setHomeAddress(address2);
-
-            em.persist(member2);
-
-
-            System.out.println("address2 = " + address2.toString());
-
-
-            em.flush();
-            em.clear();
-
 
             System.out.println("=================");
 
