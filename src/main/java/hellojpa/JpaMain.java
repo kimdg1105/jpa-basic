@@ -4,6 +4,8 @@ import hellojpa.entity.Child;
 import hellojpa.entity.Member;
 import hellojpa.entity.Parent;
 import hellojpa.entity.Team;
+import hellojpa.entity.embedded.Address;
+import hellojpa.entity.embedded.Period;
 import hellojpa.entity.inheritance.Album;
 import hellojpa.entity.inheritance.Book;
 import hellojpa.entity.inheritance.Movie;
@@ -27,20 +29,37 @@ public class JpaMain {
 
             System.out.println("=================");
 
-            Parent parent = new Parent();
+            Address address1 = new Address("Seoul", "86", "1234");
 
-            Child child1 = new Child();
-            Child child2= new Child();
+            Member member = new Member();
+            member.setUsername("Dong");
+            member.setHomeAddress(address1);
+            member.setWorkPeriod(new Period(LocalDateTime.now(),LocalDateTime.now()));
 
-            parent.addChild(child1);
-            parent.addChild(child2);
+            Member member2 = new Member();
+            Address address2 = new Address(address1.getCity(),address1.getStreet(),address1.getZipcode());
 
-            em.persist(parent);
+            member2.setUsername("Dong2");
+            member2.setHomeAddress(address2);
+            member2.setWorkPeriod(new Period(LocalDateTime.now(),LocalDateTime.now()));
+
+            em.persist(member);
+            em.persist(member2);
+
+            em.flush();
+
+
+            address2.setCity("MAPO");
+            member2.setHomeAddress(address2);
+
+            em.persist(member2);
+
+
+            System.out.println("address2 = " + address2.toString());
+
+
             em.flush();
             em.clear();
-
-            Parent parent1 = em.find(Parent.class, parent.getId());
-            em.remove(parent1);
 
 
             System.out.println("=================");

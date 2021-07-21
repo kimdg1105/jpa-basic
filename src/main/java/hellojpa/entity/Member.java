@@ -2,6 +2,8 @@ package hellojpa.entity;
 
 
 import hellojpa.entity.base.BaseEntity;
+import hellojpa.entity.embedded.Address;
+import hellojpa.entity.embedded.Period;
 import hellojpa.enums.RoleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity // 클래스 이름이 Default이다.
 @Getter
 @Setter
-public class Member extends BaseEntity {
+public class Member {
     @Id
     @GeneratedValue // stratgy = Auto
     @Column(name = "MEMBER_ID")
@@ -30,43 +32,48 @@ public class Member extends BaseEntity {
     @Column(name = "TEAM_ID")
     private Long teamId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "TEAM_ID") // FK 조인할 필드명
+    @Embedded
+    private Address homeAddress;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
+            @AttributeOverride(name = "street", column = @Column(name = "WORK_STREET")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "WORK_ZIPCODE"))
+
+    })
+    private Address workAddress;
+
+
+    @Embedded
+    private Period workPeriod;
+
+
+
+//
+//    @Column
+//    private Integer age;
+//
+//    @Enumerated(EnumType.STRING)
+//    private RoleType roleType;
+//
+//    private LocalDateTime orderDate;
+//
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private Date lastModifiedDate;
+//
+//    @Lob
+//    private String description;
+//
+//    @OneToOne(fetch = LAZY)
+//    @JoinColumn(name = "LOCKER_ID")
+//    private Locker locker;
+//
+//    @ManyToOne(fetch = LAZY) // 프록시 객체의 조회로 바뀐다.
+//    @JoinColumn
 //    private Team team;
 //
-//    @OneToMany(mappedBy = "member")
-//    private List<Order> orders = new ArrayList<>();
-//
-
-
-    @Column
-    private Integer age;
-
-    @Enumerated(EnumType.STRING)
-    private RoleType roleType;
-
-    private LocalDateTime orderDate;
-
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModifiedDate;
-
-    @Lob
-    private String description;
-
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
-
-
-    @ManyToMany
-    @JoinTable(name = "MEMBER_PRODUCT")
-    private List<Product> products = new ArrayList<>();
-
-    @ManyToOne(fetch = LAZY) // 프록시 객체의 조회로 바뀐다.
-    @JoinColumn
-    private Team team;
-
 
     public Member() {
     }
