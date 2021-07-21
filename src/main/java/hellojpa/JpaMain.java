@@ -16,7 +16,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -29,17 +31,41 @@ public class JpaMain {
 
             System.out.println("=================");
 
-            Address address1 = new Address("Seoul", "86", "1234");
-
             Member member = new Member();
             member.setUsername("Dong");
-            member.setHomeAddress(address1);
+
             member.setWorkPeriod(new Period(LocalDateTime.now(),LocalDateTime.now()));
 
-            Address address = new Address(address1.getCity(),address1.getStreet(), "5678");
+            member.getFavoriteFoods().add("Chicken");
+            member.getFavoriteFoods().add("Meat");
+            member.getFavoriteFoods().add("Fish");
+
+            Address address = new Address("Busan", "12", "2223");
             member.setHomeAddress(address);
+            member.getAddressHistory().add(address);
+            member.getAddressHistory().add(new Address("Seoul", "86", "1234"));
 
             em.persist(member);
+            em.flush();
+            em.clear();
+
+            System.out.println("----------");
+
+            Member member1 = em.find(Member.class, member.getId()); //@ElementCollection 은 지연로딩으로 불러온다. 기본값이 LAZY
+            System.out.println("----------");
+            Set<String> meber1FavoriteFoods = member1.getFavoriteFoods();
+            System.out.println("meber1FavoriteFoods = " + meber1FavoriteFoods.toString());
+
+            Address a = member1.getHomeAddress();
+            member1.setHomeAddress(new Address("NewPlace", a.getStreet(),a.getZipcode())); // 올바른 값 타입 변경 1
+
+            member1.getFavoriteFoods().remove("Meat");
+            member1.getFavoriteFoods().add("new Food"); //올바른 값 타입 변경 2
+
+            member1.getAddressHistory().remove(new Address("Busan", "12", "2223"));
+            member1.getAddressHistory().add(new Address("NewCity", "12", "2223"));
+
+
 
             System.out.println("=================");
 
