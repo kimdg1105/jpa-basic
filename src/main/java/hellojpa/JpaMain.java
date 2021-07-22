@@ -1,6 +1,7 @@
 package hellojpa;
 
 import hellojpa.entity.Member;
+import hellojpa.entity.MemberDTO;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -25,21 +26,15 @@ public class JpaMain {
             em.persist(member1);
             em.persist(member1);
 
-            List<Member> resultList = em.createQuery("select m from Member as m where  m.username =:username", Member.class) // 이름 기반
-//            em.createQuery("select m from Member as m where  m.username =?1", Member.class) // 위치 기반
-                    .setParameter("username", "Dong")
-                    .setParameter("1","Dong")
+            em.flush();
+            em.clear();
+
+            List<MemberDTO> resultList = em.createQuery("select  new hellojpa.entity.MemberDTO(m.username, m.age) from Member m", MemberDTO.class) // 이름 기반
                     .getResultList();
 
-//            TypedQuery<String> query2 = em.createQuery("select m.username from Member as m", String.class);
-//            Query query3 = em.createQuery("select m.username, m.age from Member as m");
-
-            Member singleResult = query1.getSingleResult();
-            System.out.println("singleResult.getUsername() = " + singleResult.getUsername());
-
-
-
-
+            MemberDTO memberDTO = resultList.get(0);
+            System.out.println("memberDTO = " + memberDTO.getName());
+            System.out.println("memberDTO = " + memberDTO.getAge());
 
             tx.commit();
 

@@ -1,7 +1,6 @@
 package hellojpa.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -9,6 +8,7 @@ import javax.persistence.*;
 @Entity // 클래스 이름이 Default이다.
 @Getter
 @Setter
+@NoArgsConstructor
 public class Member {
     @Id @GeneratedValue
     private Long id;
@@ -20,4 +20,5 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
     private Team team;
+
 }
