@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Collection;
 import java.util.List;
 
 public class JpaMain {
@@ -44,37 +45,39 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            String query1 =
-                    "select " +
-                            "case when m.age <= 10 then '학생요금'" +
-                            "   when m.age >=60 then '경로요금'" +
-                            "   else '일반요금' end " +
-                    "from Member m";
+            String query1 = "select m.username from Member m"; // 상태 필드로서, 경로 탐색의 끝이다.
 
-            String query2 =
-                    "select coalesce(m.username, '이름 없는 회원') " +
-                            "from Member m";
+            String query2 = "select m.team from Member m";
 
-            String query3 =
-                    "select nullif(m.username, '관리자') " +
-                            "from Member m";
+            String query3 = "select t.members From Team t";
+
+            String query4 = "select m.username From Team t join t.members m";
 
             List<String> resultList1 = em.createQuery(query1, String.class).getResultList();
 
-            List<String> resultList2 = em.createQuery(query2, String.class).getResultList();
+            List<Team> resultList2 = em.createQuery(query2, Team.class).getResultList();
 
-            List<String> resultList3 = em.createQuery(query3, String.class).getResultList();
+            Collection resultList3 = em.createQuery(query3, Collection.class).getResultList();
+
+            List<String> resultList4 = em.createQuery(query4, String.class).getResultList();
+
 
             for (String s : resultList1) {
-                System.out.println("s = " + s);
+                System.out.println("s1 = " + s);
             }
 
-            for (String s : resultList2) {
-                System.out.println("s = " + s);
-
+            for (Team s : resultList2) {
+                System.out.println("s2 = " + s.toString());
             }
 
-            System.out.println("resultList3 = " + resultList3);
+            for (Object s : resultList3) {
+                System.out.println("s3 = " + s.toString());
+            }
+
+            for (String s : resultList4) {
+                System.out.println("s4 = " + s.toString());
+            }
+
 
             tx.commit();
 
