@@ -19,65 +19,60 @@ public class JpaMain {
 
         tx.begin();
         try {
-            Team team = new Team();
-            team.setName("SK");
-            em.persist(team);
+            Team teamA = new Team();
+            teamA.setName("A");
+            em.persist(teamA);
+            Team teamB = new Team();
+            teamB.setName("B");
+            em.persist(teamB);
+            Team teamC = new Team();
+            teamC.setName("C");
+            em.persist(teamC);
 
             Member member1 = new Member();
-            member1.setUsername("Dong");
-            member1.setAge(25);
-            member1.changeTeam(team);
+            member1.setUsername("Tester1");
+            member1.changeTeam(teamA);
 
             Member member2 = new Member();
-            member2.setUsername(null);
-            member2.setAge(67);
-            member2.changeTeam(team);
+            member2.setUsername("Tester2");
+            member2.changeTeam(teamA);
 
             Member member3 = new Member();
-            member2.setUsername("관리자");
-            member2.setAge(7);
-            member2.changeTeam(team);
+            member3.setUsername("Tester3");
+            member3.changeTeam(teamB);
+
+            Member member4 = new Member();
+            member4.setUsername("Tester4");
+
 
             em.persist(member1);
             em.persist(member2);
             em.persist(member3);
+            em.persist(member4);
 
             em.flush();
             em.clear();
 
-            String query1 = "select m.username from Member m"; // 상태 필드로서, 경로 탐색의 끝이다.
+            String query1 = "select m from Member m join fetch m.team";
 
-            String query2 = "select m.team from Member m";
-
-            String query3 = "select t.members From Team t";
-
-            String query4 = "select m.username From Team t join t.members m";
-
-            List<String> resultList1 = em.createQuery(query1, String.class).getResultList();
-
-            List<Team> resultList2 = em.createQuery(query2, Team.class).getResultList();
-
-            Collection resultList3 = em.createQuery(query3, Collection.class).getResultList();
-
-            List<String> resultList4 = em.createQuery(query4, String.class).getResultList();
+            List<Member> resultList1 = em.createQuery(query1, Member.class).getResultList();
 
 
-            for (String s : resultList1) {
-                System.out.println("s1 = " + s);
+
+            for (Member s : resultList1) {
+                try {
+                    System.out.println("s1.Member = " + s + "s1.Team = " + s.getTeam().getName());
+                    //회원1 -> 팀(SQL)
+                    //회원2 -> 팀(1차 캐시)
+                    //회원3 -> 팀(SQL)
+
+                    //N+1 문제가 이런 식으로 발생한다.
+
+                }
+                catch (NullPointerException e){
+                    System.out.println("Memeber "+  s + " has no team.");
+                }
             }
-
-            for (Team s : resultList2) {
-                System.out.println("s2 = " + s.toString());
-            }
-
-            for (Object s : resultList3) {
-                System.out.println("s3 = " + s.toString());
-            }
-
-            for (String s : resultList4) {
-                System.out.println("s4 = " + s.toString());
-            }
-
 
             tx.commit();
 
