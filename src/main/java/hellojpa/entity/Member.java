@@ -8,6 +8,9 @@ import javax.persistence.*;
 @Entity // 클래스 이름이 Default이다.
 @Getter
 @Setter
+@NamedQuery(name = "Member.findByTeam",
+        query = "select m from Member m where m.team.name =:team"
+)
 public class Member {
     @Id @GeneratedValue
     private Long id;

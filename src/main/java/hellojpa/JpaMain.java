@@ -50,16 +50,20 @@ public class JpaMain {
             em.persist(member3);
             em.persist(member4);
 
-            em.flush();
-            em.clear();
+            // FLUSH 자동 호출
+            int i = em.createQuery("update Member m set m.age= 20").executeUpdate();
 
-            String query1 = "select m from Member m join fetch m.team";
+            em.f
+            System.out.println("affected = " + i);
 
-            List<Member> resultList1 = em.createQuery(query1, Member.class).getResultList();
+            System.out.println("member1 = " + member1.getAge());
+
+            List<Member> resultList = em.createNamedQuery("Member.findByTeam", Member.class)
+                    .setParameter("team", "A")
+                    .getResultList();
 
 
-
-            for (Member s : resultList1) {
+            for (Member s : resultList) {
                 try {
                     System.out.println("s1.Member = " + s + "s1.Team = " + s.getTeam().getName());
                     //회원1 -> 팀(SQL)
